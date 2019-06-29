@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8">
+  <title>クイズゲーム</title>
+
+  <style>
+    #gamewindow{
+      background-image: url(asset/image/bg-title.jpg);
+      width: 800px;
+      height: 600px;
+    }
+    #rogo{
+      position: relative;
+      top: 150px;
+      background-image: url(asset/image/rogo.png);
+      background-size: cover;
+      width: 800px;
+      height: 200px;
+      background-color: rgba(255,255,255, 0.5);
+    }
+    #btn-start{
+      position: relative;
+      top: 200px;
+      left: 180px;
+      cursor: pointer;
+    }
+    #btn-start-caption{
+      position: relative;
+      top: 110px;
+      left: 350px;
+      font-size: 36px;
+      color: white;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bgm-title" loop>
+  <source src="asset/sound/title.ogg" type="audio/ogg">
+</audio>
+
+<audio id="se-click">
+  <source src="asset/sound/click1.mp3" type="audio/mp3">
+</audio>
+
+
+<div id="gamewindow">
+  <div id="rogo"></div>
+  	<img id="btn-start" src="asset/image/btn1a.png">
+  	<div id="btn-start-caption">START</div>
+</div>
+
+<script>
+//BGM TITLE
+document.querySelector("#bgm-title").play();
+
+//SE
+document.querySelector("#btn-start").addEventListener("click", ()=>{
+  document.querySelector("#se-click").play();
+  location.href = "matching.html";
+});
+
+</script>
+</body>
+</html>

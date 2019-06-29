@@ -1,0 +1,134 @@
+@charset "UTF-8";	/* 文字コードの設定 */
+
+/**
+ * GMツール用 共通CSS
+ *
+ * @version 1.0.0
+ * @author M.katsube <katsubemakito@gmail.com>
+ * @copyright 2019 M.katsube
+ */
+
+/* -------------------------------- */
+/* 汎用クラス                       */
+/* -------------------------------- */
+.center{ text-align: center; }	/* テキストの中央寄せ */
+.show{ display: block; }		    /* 表示 */
+.hide{ display: none; }			    /* 非表示 */
+
+/* -------------------------------- */
+/* ボタン用クラス                   */
+/* -------------------------------- */
+/* ボタン共通 */
+.btn{
+	width:150px;            /* 横幅 */
+	height: 40px;           /* 高さ */
+	color: white;         /* 文字色 */
+	font-size: 14px;        /* 文字サイズ */
+	border-radius: 5px;     /* 角を丸くする */
+  margin-bottom: 10px;		/* 下部に余白を設ける */
+  cursor: pointer;        /* カーソルを変更 */
+}
+/* [ボタン] 重要度高め */
+.btn-primary{
+	background-color: #007bff;		/* 背景色を青 */
+}
+/* [ボタン] 危険 */
+.btn-danger{
+	background-color: #dc3545;		/* 背景色を赤 */
+}
+
+/* -------------------------------- */
+/* HTMLタグのデフォルトスタイル     */
+/* -------------------------------- */
+/* 段落 */
+p{
+  margin: 3px;
+}
+
+ul, ol{
+  margin-left: 5px;
+  padding-left: 20px;
+}
+
+/* テキストボックス */
+input[type="text"]{
+  width: 95%;           /* 横幅 */
+  height: 30px;         /* 高さ */
+  margin-bottom: 10px;  /* 下部に余白を設ける */
+	font-size: 14px;      /* 文字サイズ */
+}
+
+/* プルダウン */
+select{
+	width: 100%;          /* 横幅 */
+	height: 30px;         /* 高さ */
+  margin-bottom: 10px;  /* 下部に余白を設ける */
+	font-size: 14px;      /* 文字サイズ */
+}
+
+label {
+  display: block;
+  font-size: 14px;      /* 文字サイズ */
+  margin-bottom: 10px;  /* 下部に余白を設ける */
+}
+
+/* グルーピング */
+fieldset{
+	margin-bottom: 30px;   /* 下部に余白を設ける */
+}
+legend{
+	font-weight: bold;		/* 太字にする */
+	font-size: 18px;      /* 文字サイズ */
+}
+
+/* 補足などを表すテキスト */
+small{
+	color:gray;       /* 文字色 */
+}
+
+
+/* -------------------------------- */
+/* GMツール専用のスタイル           */
+/* -------------------------------- */
+/* コンテンツ全体の外枠 */
+#contents{
+	width: 800px;      /* 横幅 */
+}
+
+/* ---------- */
+/* API        */
+/* ---------- */
+#api-request{
+	display: flex;
+}
+#api-request-input{
+	border: 1px solid gray;
+	width: 300px;
+	margin: 3px;
+	padding: 5px;
+}
+#api-request-result{
+	width: 400px;
+	height: 300px;
+	margin: 3px;
+	padding: 5px;
+}
+
+/* ---------- */
+/* File       */
+/* ---------- */
+#file-view{
+	display: flex;
+}
+#file-view-select{
+	border: 1px solid gray;
+	width: 300px;
+	margin: 3px;
+	padding: 5px;
+}
+#file-view-result{
+	width: 400px;
+	height: 300px;
+	margin: 3px;
+	padding: 5px;
+}

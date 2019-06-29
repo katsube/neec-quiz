@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+  <title>デバッグツール</title>
+  <link rel="stylesheet" href="/quiz/gm/style.css" type="text/css" media="all">
+</head>
+<body>
+
+<h1>デバッグツール</h1>
+
+<section id="contents">
+  <fieldset>
+    <legend>APIテスト</legend>
+    <div id="api-request">
+      <div id="api-request-input">
+        <select id="api-type">
+          <option value="">----- 選択してください -----</option>
+          <option value="join">ユーザー登録 (join.php)</option>
+          <option value="isready">満員確認 (isready.php)</option>
+          <option value="start">クイズ情報取得 (start.php)</option>
+          <option value="receive">クイズ回答 (receive.php)</option>
+          <option value="isend">クイズ回答数確認 (isend.php)</option>
+          <option value="result">クイズ結果取得 (result.php)</option>
+        </select>
+        <form id="api-form-join" action="/quiz/api/join.php" class="hide" target="api-preview">
+          <input type="text" name="uname" placeholder="ユーザー名(uname)">
+          <label><input type="checkbox" name="_debug" value="on">デバッグモード</label>
+          <button class="btn btn-primary">送信</button>
+        </form>
+        <form id="api-form-isready" action="/quiz/api/isready.php" class="hide" target="api-preview">
+          <p><small>※パラメーターはありません</small></p>
+          <label><input type="checkbox" name="_debug" value="on">デバッグモード</label>
+          <button class="btn btn-primary">送信</button>
+        </form>
+        <form id="api-form-start" action="/quiz/api/start.php" class="hide" target="api-preview">
+          <p><small>※パラメーターはありません</small></p>
+          <label><input type="checkbox" name="_debug" value="on">デバッグモード</label>
+          <button class="btn btn-primary">送信</button>
+        </form>
+        <form id="api-form-receive" action="/quiz/api/receive.php" class="hide" target="api-preview">
+          <input type="text" name="uid" placeholder="ユーザーID(uid)">
+          <input type="text" name="answer" placeholder="回答内容(answer)">
+          <label><input type="checkbox" name="_debug" value="on">デバッグモード</label>
+          <button class="btn btn-primary">送信</button>
+        </form>
+        <form id="api-form-isend" action="/quiz/api/isend.php" class="hide" target="api-preview">
+          <p><small>※パラメーターはありません</small></p>
+          <label><input type="checkbox" name="_debug" value="on">デバッグモード</label>
+          <button class="btn btn-primary">送信</button>
+        </form>
+        <form id="api-form-result" action="/quiz/api/result.php" class="hide" target="api-preview">
+          <input type="text" name="battle_id" placeholder="対戦ID(battle_id)">
+          <label><input type="checkbox" name="_debug" value="on">デバッグモード</label>
+          <button class="btn btn-primary">送信</button>
+        </form>
+      </div>
+      <div id="api-request-result">
+          <iframe name="api-preview" width="100%" height="200"></iframe>
+          <ul>
+            <li><small>上部に結果が表示されます</small></li>
+            <li><small>「デバッグモード」だと結果が多少見やすくなり、渡されたクエリーやCookieが表示されます。</small></li>
+          </ul>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>データファイル閲覧</legend>
+    <div id="file-view">
+      <div id="file-view-select">
+        <ul>
+          <li><a href="/quiz/gm/api/view.php?type=room" target="file-preview">参加者一覧(room.txt)</a></li>
+          <li><a href="/quiz/gm/api/view.php?type=id" target="file-preview">対戦ID(roomid.txt)</a></li>
+          <li><a href="/quiz/gm/api/view.php?type=question" target="file-preview">出題した問題(roomquestion.txt)</a></li>
+          <li><a href="/quiz/gm/api/view.php?type=answer" target="file-preview">回答一覧(roomanswer.txt)</a></li>
+        </ul>
+      </div>
+      <div id="file-view-result">
+          <iframe name="file-preview" width="100%" height="200"></iframe>
+          <ul>
+            <li><small>上部に結果が表示されます</small></li>
+          </ul>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>データリセット</legend>
+    <ul>
+      <li>サーバ上の全データを削除します。</li>
+      <li>復旧できないので実行する際は注意してください。</li>
+    </ul>
+    <form class="center">
+      <input type="button" id="btn-reset" class="btn btn-danger" value="すべてリセット">
+    </form>
+  </fieldset>
+
+</section>
+
+<script src="/quiz/js/util.js"></script>
+<script>
+var Status = {
+  api: null    //現在選択中のAPI
+}
+
+/**
+ * API選択
+ */
+$("#api-type").addEventListener("change", ()=>{
+  let api = $("#api-type").value;
+  api = (api === "")?   null:api;
+
+  // 直前に表示していたフォームを非表示
+  if( Status.api !== null  ){
+    $(`#api-form-${Status.api}`).classList.add("hide");
+  }
+
+  // 選択されたフォームを表示
+  if( api !== null){
+    $(`#api-form-${api}`).classList.remove("hide");
+  }
+
+  Status.api = api;
+});
+
+/**
+ * データリセット
+ */
+$("#btn-reset").addEventListener("click", ()=>{
+  if( confirm("本当に実行してもよろしいですか？？") ){
+    requestAPI("/quiz/gm/api/reset.php", (json)=>{
+      if(json["status"]){
+        alert("成功しました");
+      }
+      else{
+        alert("失敗しました");
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

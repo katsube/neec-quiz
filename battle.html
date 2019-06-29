@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8">
+  <title>バトル画面 | クイズゲーム</title>
+  <style>
+    #question{
+      border: 1px solid gray;
+      width: 400px;
+      height: 80px;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    #answer{
+      width: 320px;
+      font-size: 14px;
+      padding: 5px;
+    }
+    #btn-answer{
+      width: 70px;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<h3>問題</h3>
+<div id="question">読み込み中</div>
+<form id="frm-answer">
+  <input type="text" id="answer" placeholder="問題の答えを入力">
+  <button type="button" id="btn-answer">回答</button>
+</form>
+<div id="nowloading" style="display:none">
+  ...Now loading
+</div>
+
+<h3>対戦メンバー</h3>
+<ul id="memberlist"></ul>
+
+<script src="/quiz/js/util.js"></script>
+<script>
+window.onload = ()=>{
+  //------------------------------
+  // クイズ開始に必要なデータ取得
+  //------------------------------
+  requestAPI("/quiz/api/start.php", (json)=>{
+    const battle_id = json["battle_id"];   // 対戦ID
+    const quiz_str  = json["quiz"];        // クイズの問題
+    const member    = json["member"];      // メンバー一覧
+
+    // 対戦IDをローカルに保存
+    localStorage.setItem("battle_id", battle_id);
+
+    // 問題文を表示
+    document.querySelector("#question").innerHTML = quiz_str;
+
+    // メンバー一覧を表示
+    let html = "";
+    for(let uid in member){
+      html += `<li>${member[uid]}</li>`;
+    }
+    document.querySelector("#memberlist").innerHTML = html;
+  });
+};
+
+//------------------------------
+// 回答ボタンをクリック
+//------------------------------
+document.querySelector("#btn-answer").addEventListener("click",()=>{
+
+  // 入力内容のチェック
+  const answer = document.querySelector("#answer");   // 入力された内容を取得
+  if( answer.value === "" ){
+    alert("回答が入力されていません");
+    answer.focus();
+    answer.style.backgroundColor = "lightpink";
+    return(false);
+  }
+
+  // 送信前の確認
+  if( !confirm("本当にこの内容で回答しますか？") ){
+    return(false);
+  }
+
+  // Nowloadingモードにする
+  document.querySelector("#frm-answer").style.display = "none";
+  document.querySelector("#nowloading").style.display = "block";
+
+
+  // ユーザーIDを取り出す
+  const uid = localStorage.getItem("uid");
+
+  // サーバに送信するクエリ(引数)を作成
+  const query  =    `answer=${encodeURI(answer.value)}`
+                  + "&"
+                  + `uid=${encodeURI(uid)}`;
+
+  // 回答をサーバへ送信
+  requestAPI(`/quiz/api/receive.php?${query}`, (json)=>{
+    // 全員の回答待ち
+    setInterval(()=>{
+    	requestAPI(`/quiz/api/isend.php`, (json)=>{
+        if(json["isend"]){
+          location.href="result.html";
+        }
+    	});
+    }, 3000);
+  });
+});
+
+// ボタンを押さずエンターキーで送信する処理をキャンセル
+document.querySelector("#frm-answer").addEventListener("submit", (e)=>{
+  e.preventDefault();
+});
+</script>
+</body>
+</html>

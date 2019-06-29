@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8">
+  <title>マッチング｜クイズゲーム</title>
+</head>
+<body>
+
+<h1>マッチング</h1>
+
+<form id="form-join">
+  <input type="text" name="uname" id="uname" placeholder="名前を入力">
+  <button type="button" id="btn-join">参加</button>
+</form>
+
+<div id="nowloading" style="display:none">
+  Now Loading...
+</div>
+
+<script src="/quiz/js/util.js"></script>
+<script>
+
+/**
+ * 参加ボタンをクリック
+ **/
+document.querySelector("#btn-join").addEventListener("click", ()=>{
+  const uname = document.querySelector("#uname");
+
+  //----------------------------------
+  // Validation
+  //----------------------------------
+  if(uname.value === ""){
+    alert("ユーザー名を入力してください");
+    uname.style.backgroundColor = "lightpink";    // 背景色をピンク
+    uname.focus();                                // テキストボックスにフォーカス
+    return(false);
+  }
+
+  //----------------------------------
+  // Now Loadingを表示
+  //----------------------------------
+  document.querySelector("#form-join").style.display = "none";    // 入力フォームを非表示
+  document.querySelector("#nowloading").style.display = "block";  // NowLoadingを表示
+
+  //----------------------------------
+  // ユーザー登録
+  //----------------------------------
+  requestAPI(`/quiz/api/join.php?uname=${encodeURI(uname.value)}`, (json)=>{
+    // サーバから渡されたユーザーIDを保存
+    localStorage.setItem("uid", json["uid"]);
+
+    // 3秒置きにサーバを確認する
+    setInterval(()=>{
+      requestAPI("/quiz/api/isready.php", (json)=>{
+        // 回答が出揃ったら次の画面へ移動する
+        if(json["ready"]){
+          location.href = 'battle.html';
+        }
+      });
+    }, 3000);
+  });
+});
+</script>
+</body>
+</html>
