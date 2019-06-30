@@ -6,14 +6,14 @@
 ### Install
 PHPが動作するWebサーバのドキュメントルート下にcloneするか、ダウンロードしたファイルを設置してください。
 ```
-$ cd /var/wwww/html
+$ cd (ドキュメントルート)
 $ git clone https://github.com/katsube/neec-quiz quiz
 ```
 
 データファイルを格納するディレクトリに実行権(パーミッション)の設定を行います。
 ```
-$ chmod 0777 /var/wwww/html/quiz/api/data
-$ chmod 0777 /var/wwww/html/quiz/api/data/result
+$ chmod 0777 quiz/api/data
+$ chmod 0777 quiz/api/data/result
 ```
 
 ### How to use
